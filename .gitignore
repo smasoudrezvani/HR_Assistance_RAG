@@ -1,0 +1,27 @@
+# Python Environment & Cache Leftovers
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.pypy/
+.env*
+
+# Local Vector Databases & Logs
+chroma_data/
+*.log
+usage.log
+
+# Corporate Domain Context (company Private Policies)
+docs/
+doc/
+notebooks/
+chroma_data/
+
+# Evaluation Testing Artifacts
+tests/eval_dataset.json
+tests/eval_prompt.md
+ARCHITECTURE.md
+
+# OS specific overrides
+.DS_Store
+Thumbs.db
