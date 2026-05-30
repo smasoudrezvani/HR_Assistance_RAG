@@ -20,18 +20,20 @@
     * **Average Answer Correctness:** `0.56 / 1.00`
     * **Average Answer Faithfulness:** `1.00 / 1.00`
 
-## Stage 3: Hybrid Search & Reranking - 🔄 IN PROGRESS
-- [ ] Add BM25 sparse retrieval alongside dense vector retrieval to fix keyword dilution.
-- [ ] Implement Reciprocal Rank Fusion (RRF) to blend sparse and dense coordinates.
-- [ ] Add a local Cross-Encoder reranker (`sentence-transformers/ms-marco-MiniLM`).
-- [ ] Keep BM25 and ChromaDB indexes strictly in sync.
-- [ ] Re-run the evaluation suite and generate a comparison scorecard.
+## Stage 3: Hybrid Search & Reranking - ✅ COMPLETED
+- [x] Implemented BM25 sparse retrieval.
+- [x] Implemented Reciprocal Rank Fusion (RRF) math.
+- [x] Integrated `ms-marco-MiniLM` Cross-Encoder reranker.
+- [x] Synchronized database memory indexes on application lifecycles.
+  * **Stage 3 Scorecard (Hybrid + Rerank):**
+    * **Average Answer Correctness:** `0.47 / 1.00` (Dropped due to tight context compression)
+    * **Average Answer Faithfulness:** `1.00 / 1.00`
 
-## Stage 4: Advanced RAG Features - ⏳ PLANNED
-- [ ] Implement structure-aware recursive chunking (headers and paragraphs).
+## Stage 4: Advanced RAG Features - 🔄 IN PROGRESS
+- [ ] Increase generation prompt window target (`top_k=5` post-rerank context allowance).
+- [ ] Implement structure-aware recursive chunking (split on headers/paragraphs instead of fixed-size blocks).
 - [ ] Add strict inline citations `[chunk_id]` to the LLM response window.
 - [ ] Build an LLM-as-a-judge citation verification engine.
-- [ ] Refine the "No Answer" mode based on retrieval confidence thresholds.
 
 ## Stage 5: Multi-Agent RAG (LangGraph) - ⏳ PLANNED
 - [ ] Introduce LangGraph for state-machine orchestration.

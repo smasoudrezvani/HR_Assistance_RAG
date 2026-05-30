@@ -20,7 +20,6 @@ chroma_data/
 # Evaluation Testing Artifacts
 tests/eval_dataset.json
 tests/eval_prompt.md
-ARCHITECTURE.md
 
 # OS specific overrides
 .DS_Store
