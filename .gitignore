@@ -16,6 +16,7 @@ docs/
 doc/
 notebooks/
 chroma_data/
+.claude/
 
 # Evaluation Testing Artifacts
 tests/eval_dataset.json

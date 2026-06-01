@@ -40,7 +40,8 @@ def setup_database():
 
     print("[*] Empty database detected. Starting ingestion pipeline...")
     docs = load_documents("docs")
-    chunks = process_documents(docs, chunk_size=500, overlap=50)
+    # Give chunks room to breathe so paragraphs don't break
+    chunks = process_documents(docs, chunk_size=1500, overlap=200)
     print(f"[*] Created {len(chunks)} smart chunks. Generating embeddings...")
     texts = [chunk.text for chunk in chunks]
     embeddings = get_embeddings_batch(texts)

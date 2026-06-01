@@ -23,17 +23,32 @@ This project utilizes a **Feature-Based Layered Architecture**. The codebase iso
   │  └─ app/db/models.py , app/rag/generator.py            │
   └────────────────────────────────────────────────────────┘
 
-🔄 End-to-End Hybrid Pipeline Trace Loop
-1. User Request: Client posts a message to /api/v1/query.
+```
+## The Stack
+*   **API Framework:** FastAPI
+*   **Vector Database (Dense):** ChromaDB (Local Persistent)
+*   **Sparse Index (Keyword):** BM25Okapi (In-Memory)
+*   **Embeddings:** OpenAI `text-embedding-3-small`
+*   **Reranker:** Cross-Encoder (`ms-marco-MiniLM-L-6-v2`)
+*   **LLM Generator:** OpenAI `gpt-4o-mini`
+*   **Evaluation:** Custom LLM-as-a-Judge (`gpt-4o`)
+*   **Observability:** Langfuse
 
-2. Orchestration Branch (app/retrieval/hybrid.py):
+## The 4-Valve Request Lifecycle
+To effectively debug the system, it is mapped into four sequential "valves." If data stops flowing or becomes corrupted, the fault is isolated to one of these distinct boundaries:
 
-- Dense Fetch: Query text converts to a float vector and pulls the Top 15 chunks from ChromaDB.
+1.  **The API Entry (`app/api/rag.py`):** 
+    Receives the user's JSON payload, initiates tracing, and acts as the final gatekeeper (applying the confidence threshold guardrail) before returning the response.
+2.  **The Retrieval Orchestrator (`app/retrieval/hybrid.py` & `reranker.py`):** 
+    Executes the Hybrid Search strategy. It queries the Vector DB and BM25 index, fuses the results mathematically using Reciprocal Rank Fusion (RRF), and re-sorts the top matches using a Cross-Encoder neural network.
+3.  **The Storage Engine (`app/vectorstore/vector_db.py` & `app/ingestion/chunker.py`):** 
+    Handles data persistence. Documents are parsed using a recursive, Markdown-aware text splitter (1500 character limits, preserving paragraphs), embedded, and synced across ChromaDB and the BM25 index.
+4.  **The Generator (`app/rag/generator.py`):** 
+    Packages the high-precision retrieved chunks into a strict system prompt, forcing the LLM to synthesize an answer and append explicit `[chunk_id]` inline citations for every factual claim.
 
-- Sparse Fetch: Query text hits the raw keyword token indices to pull the Top 15 chunks via BM25.
-
-- RRF Consolidation: Both arrays merge mathematically based entirely on structural position rank.
-
-- Reranker Compression: The local Cross-Encoder analyzes the 30 candidate blocks simultaneously, sorting and squeezing them down to the final Top 3 chunks.
-
-3. Generation Stage: app/rag/generator.py processes the 3 chunks and outputs the grounded text response back to the client router.
+## Ingestion Flow
+1. Load Markdown files from `docs/`.
+2. Recursively split text by `\n\n`, `\n`, and sentences.
+3. Generate UUIDs for each chunk.
+4. Batch embed via OpenAI.
+5. Upsert into ChromaDB and synchronize the in-memory BM25 dictionary.

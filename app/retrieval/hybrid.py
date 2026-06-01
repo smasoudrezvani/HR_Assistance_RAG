@@ -47,9 +47,9 @@ def advanced_retrieval(query: str, collection_name: str, strategy: str = "rerank
     elif strategy == "rerank":
         # 1. High Recall Phase (Cast a wide net)
         query_vector = get_embedding(query)
-        dense = query_dense(collection_name, query_vector, top_k=15)
-        sparse = query_sparse(query, top_k=15)
+        dense = query_dense(collection_name, query_vector, top_k=30)
+        sparse = query_sparse(query, top_k=30)
         fused = reciprocal_rank_fusion(dense, sparse)
         
         # 2. High Precision Phase (Cross-Encoder filtering)
-        return rerank_chunks(query, fused, top_k=3)
+        return rerank_chunks(query, fused, top_k=5)

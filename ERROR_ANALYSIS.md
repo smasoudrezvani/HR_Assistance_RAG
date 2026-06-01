@@ -47,3 +47,31 @@
 * **Example Case:** Customer Support blockers (`q7`) - RAG returned 'Jill' instead of 'Mahmoud'.
 * **Root Cause Analysis:** Fixed-size chunking broke sentences in half at arbitrary limits. The cross-encoder saw an isolated phrase matching support management structural context and mistakenly paired a nearby name with the blocker statement.
 * **Stage 4 Corrective Action:** **Recursive Structure-Aware Chunking**. We will scrap fixed-size slicing and rebuild the processing engine to respect Markdown block headers and physical paragraphs. This guarantees that names, roles, and conditions stay logically grouped together within the same chunk container.
+
+## Stage 4: Structure, Citations, and Trust
+
+**Final Stage 4 Baseline Scores:**
+*   **Correctness:** 0.64
+*   **Faithfulness:** 0.98
+
+### Key Diagnoses & Resolutions
+
+**1. The Silent Truncation (Indentation Bug)**
+*   **Symptom:** Cross-Encoder was successfully sorting chunks, but the specific facts needed to answer questions were missing entirely from the database.
+*   **Root Cause:** In `app/ingestion/chunker.py`, the `return` statement was accidentally indented inside the `for` loop. The recursive chunker processed the first paragraph of a document and immediately exited, silently discarding 90% of the corpus.
+*   **Resolution:** Dedented the `return` statement and re-ingested the data. 
+
+**2. The Inverted Reranker Logic**
+*   **Symptom:** The retrieval pipeline consistently returned the absolute worst, least-relevant chunks (e.g., generic welcome paragraphs for policy questions).
+*   **Root Cause:** The Cross-Encoder outputs logit scores (where higher positive numbers = better match). The sorting function was previously optimized for spatial distance (smaller = better). It sorted the logits in ascending order.
+*   **Resolution:** Flipped the sorting logic to `reverse=True` inside `reranker.py`, successfully elevating high-relevancy chunks to the LLM.
+
+**3. The Aggressive Guardrail**
+*   **Symptom:** Every query returned the fallback "I don't know" string.
+*   **Root Cause:** The confidence threshold was set at `0.0`. Valid semantic matches frequently return slightly negative logit scores (e.g., `-2.5`) depending on text density. 
+*   **Resolution:** Calibrated the `CONFIDENCE_THRESHOLD` to `-5.0`, allowing valid context to pass while still catching complete hallucinations.
+
+**4. Context Fragmentation**
+*   **Symptom:** LLM struggled to synthesize multi-part policies.
+*   **Root Cause:** `chunk_size` was set to 500 characters, breaking complex lists in half.
+*   **Resolution:** Expanded `chunk_size` to 1500 with a 200-character overlap, and increased the context window to `top_k=5`.

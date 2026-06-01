@@ -1,26 +1,25 @@
 from sentence_transformers import CrossEncoder
 from app.db.models import RetrievedChunk
 
-# Initialize local cross-encoder model (downloads ~80MB on first run)
-print("[*] Loading Cross-Encoder Model...")
-encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2", max_length=512)
+# Load the model once into memory
+reranker_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', max_length=512)
 
 def rerank_chunks(query: str, chunks: list[RetrievedChunk], top_k: int = 5) -> list[RetrievedChunk]:
-    """Scores query-chunk pairs together and returns the highest precision matches."""
+    """Scores chunks using a Cross-Encoder and sorts by highest relevancy."""
     if not chunks:
         return []
-    
-    # Prepare pairs format expected by the model: [[query, text], [query, text]]
+        
+    # Prepare the pairs for the Cross-Encoder: [ [query, text1], [query, text2], ... ]
     pairs = [[query, chunk.text] for chunk in chunks]
-
-    # Predict relevance scores
-    scores = encoder.predict(pairs)
-
-    # Attach new cross-encoder scores back to our Pydantic objects
-    for chunk, score in zip(chunks, scores):
-        chunk.distance = float(score)  # Higher is better for Cross-Encoders
     
-    # Sort descending (highest relevance first)
-    reranked = sorted(chunks, key= lambda x: x.distance, reverse=True)
+    # Predict returns a list of logit scores
+    scores = reranker_model.predict(pairs)
     
-    return reranked[:top_k]
+    # Attach the new scores to our chunks
+    for idx, chunk in enumerate(chunks):
+        chunk.distance = float(scores[idx]) 
+        
+    # THE CRITICAL FIX: reverse=True ensures HIGHEST scores (best matches) go to the top!
+    chunks.sort(key=lambda x: x.distance, reverse=True)
+    
+    return chunks[:top_k]

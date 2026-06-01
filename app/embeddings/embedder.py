@@ -1,17 +1,26 @@
 import os
 from openai import OpenAI
 
-# Initialize client. Ensure load_dotenv() is called in your main script before this runs.
+# Initialize client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+MODEL_NAME = "text-embedding-3-small"
 
-def get_embedding(text : str, model : str = 'text-embedding-3-small') -> list[float]:
-    """Generates an embedding for a single string."""
-    response = client.embeddings.create(input=text, model=model)
+def get_embedding(text: str) -> list[float]:
+    """Generates an embedding for a single string query."""
+    response = client.embeddings.create(
+        input=[text],
+        model=MODEL_NAME
+    )
     return response.data[0].embedding
 
-def get_embeddings_batch(texts : list[str], model: str = "text-embedding-3-small") -> list[list[float]]:
-    """Generates embeddings for a list of strings efficiently."""
-    response = client.embeddings.create(input=texts, model=model)
-    return [data.embedding for data in response.data]
+def get_embeddings_batch(texts: list[str]) -> list[list[float]]:
+    """Generates embeddings for a batch of text chunks during ingestion."""
+    if not texts:
+        return []
+    response = client.embeddings.create(
+        input=texts,
+        model=MODEL_NAME
+    )
+    return [item.embedding for item in response.data]
 
 

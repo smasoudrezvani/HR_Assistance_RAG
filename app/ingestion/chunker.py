@@ -1,52 +1,70 @@
 import re
-from app.db.models import Document, Chunk
+import uuid
+from app.db.models import Chunk
 
-def smart_chunker(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]:
-    """Splits text by semantic boundaries (paragraphs, sentences) and packs them."""
-    splits = re.split(r'(\n\n|\n|\. )', text)
-
-    blocks = []
-    for i in range(0, len(splits) - 1, 2):
-        blocks.append(splits[i] + splits[i+1])
-    if len(splits) % 2 != 0:
-        blocks.append(splits[-1])
-
-    blocks = [b for b in blocks if b.strip()]
-
-    chunks = []
-    current_chunk = ""
-
-    for block in blocks:
-        if len(current_chunk) + len(block) <= chunk_size:
-            current_chunk += block
-        else:
-            if current_chunk:
-                chunks.append(current_chunk.strip())
-            
-            overlap_text = current_chunk[-overlap:] if current_chunk else ""
-            clean_start = overlap_text.find(" ")
-            if clean_start != -1:
-                overlap_text = overlap_text[clean_start:]
-                
-            current_chunk = overlap_text + block
-
-    if current_chunk:
-        chunks.append(current_chunk.strip())
-
-    return chunks
-
-def process_documents(documents: list[Document], chunk_size: int = 500, overlap: int = 50) -> list[Chunk]:
-    """Takes a list of Documents and returns a list of Pydantic Chunk objects."""
-    all_chunks = []
+def split_by_separators(text: str, separators: list[str], max_length: int) -> list[str]:
+    """Recursively splits text using a prioritized list of regex separators."""
+    if not separators:
+        # Fallback: strict character split if no separators are left
+        return [text[i:i+max_length] for i in range(0, len(text), max_length)]
     
-    for doc in documents:
-        raw_chunks = smart_chunker(doc.content, chunk_size, overlap)
-        for i, text_chunk in enumerate(raw_chunks):
-            chunk = Chunk(
-                id=f"{doc.filename}_smart_{i}",
-                filename=doc.filename,
-                text=text_chunk
-            )
-            all_chunks.append(chunk)
+    sep = separators[0]
+    splits = re.split(sep, text)
+    good_splits = []
+    for s in splits:
+        if len(s) <= max_length:
+            good_splits.append(s)
+        else:
+            # If the chunk is STILL too big, recursively try the next smaller separator
+            good_splits.extend(split_by_separators(s, separators[1:], max_length))
+
+    return good_splits
+    
+def process_documents(docs: list[dict], chunk_size : int = 800, overlap: int = 100) -> list[Chunk]:
+    """
+    Creates structure-aware chunks. 
+    Assumes 'docs' is a list of dicts: [{"filename": "...", "text": "..."}]
+    """
+    # 1. Paragraphs, 2. Single Newlines, 3. Sentences
+    separators = [r'\n\n+', r'\n', r'(?<=\.)\s+']
+
+    final_chunks = []
+
+    for doc in docs:
+        filename = doc.filename
+        raw_text = doc.content
+
+        # Get natural splits based on Markdown structure
+        raw_splits = split_by_separators(raw_text, separators, chunk_size)
+
+        current_text = ""
+
+        for split in raw_splits:
+            if not split.strip():
+                continue
+                
+            # If adding the next split fits inside our chunk window, append it
+            if len(current_text) + len(split) + 1 <= chunk_size:
+                current_text += split + " "
+            else:
+                # Window is full. Save the chunk.
+                if current_text:
+                    final_chunks.append(Chunk(
+                        id=uuid.uuid4().hex, 
+                        filename=filename, 
+                        text=current_text.strip()
+                    ))
+                    
+                # Setup the next chunk, preserving an overlap from the end of the previous chunk
+                overlap_text = current_text[-overlap:] if overlap > 0 and len(current_text) > overlap else ""
+                current_text = overlap_text + split + " "
+        
+        # Catch the final lingering chunk
+        if current_text.strip():
+            final_chunks.append(Chunk(
+                id=uuid.uuid4().hex, 
+                filename=filename, 
+                text=current_text.strip()
+            ))
             
-    return all_chunks
+    return final_chunks
