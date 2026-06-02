@@ -19,10 +19,14 @@ class QueryRequest(BaseModel):
     """The JSON payload a client sends to our API."""
     question : str = Field(..., description="The user's question to the RAG system")
 
+class SourceItem(BaseModel):
+    filename: str
+    url: str | None = None
+
 class QueryResponse(BaseModel):
-    """The JSON payload our API returns to the client."""
     answer: str
-    sources : list[str] = Field(default_factory=list, description="List of source filenames used")
+    # Update this line to return objects instead of strings
+    sources: list[SourceItem] = Field(default_factory=list)
 
 
 

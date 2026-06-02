@@ -1,35 +1,47 @@
-# 🏢 Company HR Policy Assistant (RAG Pipeline)
+# 🗺️ AI Engineering RAG Project Roadmap
 
-This project is a production-grade Retrieval-Augmented Generation (RAG) system built from scratch in Python. It currently serves as a FastAPI backend, utilizing semantic chunking, OpenAI embeddings, and a local ChromaDB vector store.
+## Stage 1: Baseline (Naive RAG) - ✅ COMPLETED
+- [x] Load markdown files from a local directory.
+- [x] Chunk text using standard Python.
+- [x] Embed with OpenAI `text-embedding-3-small`.
+- [x] Store in ChromaDB (local persistent client).
+- [x] Retrieve top-K chunks by cosine similarity.
+- [x] Pass to GPT-4o-mini with a grounded-answer prompt.
+- [x] Abstracted into a modular architecture (`app/` directory).
+- [x] Wrapped in a FastAPI web server.
 
-## 🗺️ Codebase Map
+## Stage 2: Evaluation & Observability - ✅ COMPLETED
+- [x] Write 22 hand-crafted test questions representing real-world failure modes.
+- [x] Format test cases as JSON (Golden Q&A Dataset).
+- [x] Add Langfuse tracing to the FastAPI application.
+- [x] Build an LLM-as-a-judge evaluator using `gpt-4o`.
+- [x] Run baseline RAG against the golden set to establish a baseline scorecard.
 
-### Root Directory
-* **`main.py`**: The entry point. It orchestrates the database setup and runs the FastAPI web server via Uvicorn.
-* **`ROADMAP.md`**: Tracks project progress and upcoming architectural stages.
-* **`.env`**: (Git-ignored) Stores the `OPENAI_API_KEY`.
-* **`requirements.txt`**: List of dependencies for the `uv` environment.
+## Stage 3: Hybrid Search & Reranking - ✅ COMPLETED
+- [x] Implemented BM25 sparse retrieval.
+- [x] Implemented Reciprocal Rank Fusion (RRF) math.
+- [x] Integrated `ms-marco-MiniLM` Cross-Encoder reranker.
+- [x] Synchronized database memory indexes on application lifecycles.
 
-### `app/` (Core Application Logic)
-* **`api/`** *(Network Layer)*
-  * `rag.py`: Contains the FastAPI routes (e.g., `POST /api/v1/query`) that expose the RAG engine to external clients.
+## Stage 4: Advanced RAG Features - ✅ COMPLETED
+- [x] Increase generation prompt window target (`top_k=5` post-rerank context allowance).
+- [x] Implement structure-aware recursive chunking (split on headers/paragraphs instead of fixed-size blocks).
+- [x] Add strict inline citations `[chunk_id]` to the LLM response window.
+- [x] Build an LLM-as-a-judge citation verification engine.
+  * **Stage 4 Scorecard:**
+    * **Average Answer Correctness:** `0.64 / 1.00`
+    * **Average Answer Faithfulness:** `0.98 / 1.00`
 
-* **`db/`** *(Data Contracts)*
-  * `models.py`: Uses Pydantic to strictly define internal data (`Document`, `Chunk`, `RetrievedChunk`) and external network payloads (`QueryRequest`, `QueryResponse`).
+## Stage 5: Production LLMOps Hardening - 🔄 IN PROGRESS
+- [ ] Semantic Caching: Store previous answers to save latency and API costs.
+- [x] Guardrails: Add input validation (block prompt injection) and output validation.
+- [ ] CI/CD Pipeline: Automate your run_evals.py script to run on GitHub Actions.
 
-* **`ingestion/`** *(Data Processing)*
-  * `loader.py`: Reads raw `.md` files from the `docs/` folder.
-  * `chunker.py`: The "Smart Semantic Chunker." Uses regex to split text safely at paragraph and sentence boundaries.
+## Stage 6: Multi-Agent RAG - ⏳ PLANNED
+- [ ] LangGraph Orchestration: Upgrade from a linear FastAPI route to a state-machine.
+- [ ] Router Agent: Build an LLM node that decides if a question needs HR policies, external web search, or a direct rejection.
 
-* **`embeddings/`** *(Math & Vectors)*
-  * `embedder.py`: Talks to OpenAI's `text-embedding-3-small` API to convert text chunks into 1536-dimensional vectors.
-
-* **`vectorstore/`** *(Database Operations)*
-  * `vector_db.py`: The isolated ChromaDB client. Handles saving (`upsert_chunks`) and searching (`query_db`) the vector graph.
-
-* **`rag/`** *(LLM Interaction)*
-  * `generator.py`: Constructs the grounded system prompt and interacts with `gpt-4o-mini` to generate cited answers.
-
-### Other Folders
-* **`docs/`**: The raw Markdown files (HR policies) that the system reads from.
-* **`tests/`**: Contains `test_core.py` to automatically verify data models and DB connections using `pytest`.
+## Stage 7: Production & Deployment - 🔄 IN PROGRESS
+- [ ] Streaming Responses: Upgrade the API to stream tokens back to the user like ChatGPT.
+- [x] Streamlit Frontend: Build a clean chat UI that consumes your FastAPI backend.
+- [ ] Docker Containerization: Write a Dockerfile and docker-compose.yml to package the UI, API, and ChromaDB together for 1-click deployment.

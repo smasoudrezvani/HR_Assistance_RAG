@@ -2,14 +2,17 @@
 
 This project utilizes a **Feature-Based Layered Architecture**. The codebase isolates core execution layers to ensure components can be easily swapped or refactored without breaking adjacent system modules.
 
-## 🛠️ The Onion Layers
-
-## 🛠️ Updated Stage 3 Hybrid Flow Layout
+## 🛠️ The Onion Layers (Updated with UI & Security)
 
 ```text
   ┌────────────────────────────────────────────────────────┐
-  │  OUTER LAYER: Presentation & Transport (FastAPI Router)│
-  │  └─ app/api/rag.py                                     │
+  │  CLIENT LAYER: User Interface                          │
+  │  └─ frontend/app.py (Streamlit)                        │
+  │       ▲                                                │
+  │       ▼ HTTP POST                                      │
+  │  OUTER LAYER: Presentation, Security & Transport       │
+  │  └─ app/api/rag.py (FastAPI Router)                    │
+  │       ├── Call: app/security/guardrails.py (Firewall)  │
   │       ▲                                                │
   │       ▼                                                │
   │  MIDDLE LAYER: Application Service Orchestration       │
@@ -22,9 +25,9 @@ This project utilizes a **Feature-Based Layered Architecture**. The codebase iso
   │  INNER CORE: Data Contracts & Pure Generation Engines  │
   │  └─ app/db/models.py , app/rag/generator.py            │
   └────────────────────────────────────────────────────────┘
-
 ```
 ## The Stack
+*   **UI Frontend:** Streamlit
 *   **API Framework:** FastAPI
 *   **Vector Database (Dense):** ChromaDB (Local Persistent)
 *   **Sparse Index (Keyword):** BM25Okapi (In-Memory)

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.db.models import QueryRequest, QueryResponse
+from app.db.models import QueryRequest, QueryResponse, SourceItem
+from app.security.guardrails import is_safe_query
 from app.retrieval.hybrid import advanced_retrieval 
 from app.rag.generator import generate_grounded_answer
 from langfuse import observe 
@@ -16,6 +17,15 @@ CONFIDENCE_THRESHOLD = -5.0   # Cross-Encoder Logit Threshold # Lower the thresh
 async def ask_question(request: QueryRequest):
     """ Accepts a question, runs it through the RAG pipeline, and returns the grounded answer. """
     try:
+        # # --- 🛡️ THE FRONT DOOR GUARDRAIL ---
+        # if not is_safe_query(request.question):
+        #     print(f"🚨 BLOCKED MALICIOUS/OFF-TOPIC QUERY: '{request.question}'")
+        #     return QueryResponse(
+        #         answer="I can only answer questions related to Talk360's HR policies, onboarding, and company rules. Please rephrase your question.",
+        #         sources=[]
+        #     )
+        # # -----------------------------------
+
         # 1. Fetch top chunks using our Stage 3/4 pipeline
         top_chunks = advanced_retrieval(
             query=request.question, 
@@ -47,7 +57,15 @@ async def ask_question(request: QueryRequest):
 
         # 4. Run Generation
         answer = generate_grounded_answer(request.question, top_chunks)
-        unique_sources = list({chunk.filename for chunk in top_chunks})
+        # unique_sources = list({chunk.filename for chunk in top_chunks})
+        unique_sources_map = {}
+        for chunk in top_chunks:
+            # TODO: In the future, I will pull chunk.metadata["url"] here!
+            # For now, let's inject a fake Confluence link based on the filename to test it
+            test_url = f"https://talk360dev.atlassian.net/wiki/search?text={chunk.filename}"
+            unique_sources_map[chunk.filename] = SourceItem(filename=chunk.filename, url=test_url)
+            
+        unique_sources = list(unique_sources_map.values())
 
         return QueryResponse(answer=answer, sources=unique_sources)
         
