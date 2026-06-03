@@ -33,7 +33,7 @@
     * **Average Answer Faithfulness:** `0.98 / 1.00`
 
 ## Stage 5: Production LLMOps Hardening - 🔄 IN PROGRESS
-- [ ] Semantic Caching: Store previous answers to save latency and API costs.
+- [x] Semantic Caching: Store previous answers to save latency and API costs.
 - [x] Guardrails: Add input validation (block prompt injection) and output validation.
 - [ ] CI/CD Pipeline: Automate your run_evals.py script to run on GitHub Actions.
 

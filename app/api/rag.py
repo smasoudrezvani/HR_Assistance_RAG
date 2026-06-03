@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.db.models import QueryRequest, QueryResponse, SourceItem
 from app.security.guardrails import is_safe_query
+from app.retrieval.cache import check_cache, store_in_cache
 from app.retrieval.hybrid import advanced_retrieval 
 from app.rag.generator import generate_grounded_answer
 from langfuse import observe 
@@ -17,6 +18,7 @@ CONFIDENCE_THRESHOLD = -5.0   # Cross-Encoder Logit Threshold # Lower the thresh
 async def ask_question(request: QueryRequest):
     """ Accepts a question, runs it through the RAG pipeline, and returns the grounded answer. """
     try:
+        # 1. FRONT DOOR GUARDRAIL
         # # --- 🛡️ THE FRONT DOOR GUARDRAIL ---
         # if not is_safe_query(request.question):
         #     print(f"🚨 BLOCKED MALICIOUS/OFF-TOPIC QUERY: '{request.question}'")
@@ -26,14 +28,21 @@ async def ask_question(request: QueryRequest):
         #     )
         # # -----------------------------------
 
-        # 1. Fetch top chunks using our Stage 3/4 pipeline
+        # 2. ⚡ SEMANTIC CACHE CHECK
+        cached_data = check_cache(request.question)
+        if cached_data:
+            # Rehydrate the SourceItem objects from the cached JSON
+            hydrated_sources = [SourceItem(**src) for src in cached_data["sources"]]
+            return QueryResponse(answer=cached_data["answer"], sources=hydrated_sources)
+
+        # 3. HYBRID RETRIEVAL
         top_chunks = advanced_retrieval(
             query=request.question, 
             collection_name=COLLECTION_NAME, 
             strategy="rerank" 
         )
 
-        # 2. 📡 THE LOGS BLOCK: This will now explicitly print to your main.py window
+        # 📡 THE LOGS BLOCK: This will now explicitly print to your main.py window
         print(f"\n=======================================================")
         print(f"📡 RETRIEVAL INTERCEPT FOR: '{request.question}'")
         print(f"=======================================================")
@@ -48,7 +57,7 @@ async def ask_question(request: QueryRequest):
             print("⚠️ ALERT: The retrieval pipeline returned an EMPTY list!")
         print(f"=======================================================\n")
 
-        # 3. Apply Threshold Guardrail
+        # Apply Threshold Guardrail
         if not top_chunks or top_chunks[0].distance < CONFIDENCE_THRESHOLD:
             return QueryResponse(
                 answer="I don't have enough information in the current documents to answer that.",
@@ -66,6 +75,9 @@ async def ask_question(request: QueryRequest):
             unique_sources_map[chunk.filename] = SourceItem(filename=chunk.filename, url=test_url)
             
         unique_sources = list(unique_sources_map.values())
+
+        # 5. ⚡ STORE RESULT IN CACHE
+        store_in_cache(request.question, answer, unique_sources)
 
         return QueryResponse(answer=answer, sources=unique_sources)
         

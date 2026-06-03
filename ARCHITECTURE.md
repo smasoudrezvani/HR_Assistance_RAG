@@ -2,7 +2,7 @@
 
 This project utilizes a **Feature-Based Layered Architecture**. The codebase isolates core execution layers to ensure components can be easily swapped or refactored without breaking adjacent system modules.
 
-## 🛠️ The Onion Layers (Updated with UI & Security)
+## 🛠️ The Onion Layers (Updated with Caching & Security)
 
 ```text
   ┌────────────────────────────────────────────────────────┐
@@ -10,9 +10,10 @@ This project utilizes a **Feature-Based Layered Architecture**. The codebase iso
   │  └─ frontend/app.py (Streamlit)                        │
   │       ▲                                                │
   │       ▼ HTTP POST                                      │
-  │  OUTER LAYER: Presentation, Security & Transport       │
+  │  OUTER LAYER: Presentation, Security & Caching         │
   │  └─ app/api/rag.py (FastAPI Router)                    │
   │       ├── Call: app/security/guardrails.py (Firewall)  │
+  │       ├── Call: app/retrieval/cache.py (Semantic Cache)│
   │       ▲                                                │
   │       ▼                                                │
   │  MIDDLE LAYER: Application Service Orchestration       │
