@@ -1,6 +1,7 @@
 import os
 import json
 import httpx
+import sys
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -97,6 +98,15 @@ def main():
     print(f"Average Answer Correctness: {avg_correctness:.2f}")
     print(f"Average Answer Faithfulness: {avg_faithfulness:.2f}")
     print("="*40)
+
+    # --- 🛑 THE CI/CD GATEKEEPER ---
+    # If the system drops below 60% correctness or 95% faithfulness, fail the build!
+    if avg_correctness < 0.60 or avg_faithfulness < 0.95:
+        print("\n❌ CI/CD ALERT: Evaluation scores fell below acceptable production thresholds.")
+        sys.exit(1) # This tells GitHub Actions to highlight the pipeline in RED
+    else:
+        print("\n✅ CI/CD SUCCESS: Evaluation passed production thresholds.")
+        sys.exit(0) # This tells GitHub Actions it passed (GREEN)
 
 if __name__ == "__main__":
     main()
