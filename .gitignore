@@ -7,20 +7,13 @@ __pycache__/
 .env*
 
 # Local Vector Databases & Logs
-chroma_data/
 *.log
 usage.log
 
-# Corporate Domain Context (company Private Policies)
-docs/
-doc/
-notebooks/
+# Ignore the vector database
 chroma_data/
-.claude/
 
-# Evaluation Testing Artifacts
-tests/eval_dataset.json
-tests/eval_prompt.md
+.claude/
 
 # OS specific overrides
 .DS_Store

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "q1_standard_lookup",
+    "question": "What is the name of the HR information system (HRIS) used at Call360?",
+    "expected_answer": "PeopleBase (available at peoplebase.call360.com). It is used for time-off requests, expense submissions, onboarding surveys, and all people-related processes.",
+    "expected_sources": ["Employee_Handbook_Overview.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q2_standard_lookup",
+    "question": "What are the four core values of Call360?",
+    "expected_answer": "Connect (build bridges with customers, colleagues, and communities), Own It (take responsibility for work and outcomes), Grow (curious learners who never stop improving), and Care (treat everyone with respect, empathy, and fairness).",
+    "expected_sources": ["Employee_Handbook_Overview.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q3_standard_lookup",
+    "question": "What is the referral bonus amount at Call360 for a successful employee referral, and when is it paid?",
+    "expected_answer": "A one-time €1,000 gross bonus paid after the referred employee has completed their full probation period, provided the referred employee has not resigned or been asked to leave, and the referring employee is still employed at Call360.",
+    "expected_sources": ["Employee_Referral_Program.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q4_standard_lookup",
+    "question": "How many vacation days per calendar year are Netherlands-based Call360 employees entitled to?",
+    "expected_answer": "25 days per calendar year (pro-rated for part-year employment). Of these, 20 are statutory days that expire by 30 June of the following year, and the remaining 5 days can be carried over for up to 5 years.",
+    "expected_sources": ["Vacation_and_Leave_Policy.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q5_standard_lookup",
+    "question": "What is the standard probation period at Call360, and can it be extended?",
+    "expected_answer": "The standard probation period is 3 months. In exceptional cases (e.g., senior roles or formal underperformance concerns) it can be extended to a maximum of 6 months total. Any extension must be communicated in writing before the end of month 3.",
+    "expected_sources": ["Probation_Period_Policy.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q6_standard_lookup",
+    "question": "How often does Call360 host its company-wide All Hands meeting, and on which day does it take place?",
+    "expected_answer": "Every third Tuesday of the month. New joiners are introduced to the whole company at this meeting. Previous recordings and notes are available in Confluence.",
+    "expected_sources": ["Onboarding_Process.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q7_standard_lookup",
+    "question": "What is the maximum annual Learning and Development budget cap per employee at Call360, and how is it calculated?",
+    "expected_answer": "The L&D budget is 5% of annual gross salary, capped at €1,500 per calendar year. It is calculated pro-rata if an employee joins mid-year. The budget does not roll over — it is use it or lose it.",
+    "expected_sources": ["Learning_and_Development_Budget.md"],
+    "difficulty": "easy",
+    "edge_case_type": null
+  },
+  {
+    "id": "q8_multi_hop",
+    "question": "The Onboarding Process instructs new hires to set their Q1 OKRs with their manager during their first month. According to the Performance Review Process, in what month is the Mid-Year Review held and what period does it cover?",
+    "expected_answer": "The Mid-Year Review is held in July and covers the period from January through June. A full Year-End Review is also held in December covering July through December.",
+    "expected_sources": ["Onboarding_Process.md", "Performance_Review_Process.md"],
+    "difficulty": "hard",
+    "edge_case_type": "multi_hop"
+  },
+  {
+    "id": "q9_multi_hop",
+    "question": "The Employee Referral Program states the €1,000 bonus is paid once the referred employee completes their probation. According to the Probation Period Policy, what is the standard probation length, and what structured check-ins occur during this period?",
+    "expected_answer": "The standard probation period is 3 months. During this time, structured check-ins occur at 30, 60, and 90 days. The 90-day review is the formal probation review where employment is either confirmed, extended, or not confirmed.",
+    "expected_sources": ["Employee_Referral_Program.md", "Probation_Period_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "multi_hop"
+  },
+  {
+    "id": "q10_multi_hop",
+    "question": "The Anti-Harassment Policy states HR will acknowledge a complaint within 2 business days. According to the Disciplinary Process, within how many business days must a hearing outcome be communicated in writing, and how many business days does an employee have to appeal?",
+    "expected_answer": "The disciplinary hearing outcome must be communicated in writing within 3 business days of the hearing. The employee may appeal the decision within 5 business days of receiving that written outcome. The appeal is heard by a manager or HR Director not involved in the original hearing.",
+    "expected_sources": ["Anti_Harassment_Policy.md", "Disciplinary_Process.md"],
+    "difficulty": "hard",
+    "edge_case_type": "multi_hop"
+  },
+  {
+    "id": "q11_multi_hop",
+    "question": "The Travel Policy requires Finance sign-off for trips costing over €1,000. According to the Expense Reimbursement Policy, what is the maximum hotel rate per night for Amsterdam and Cape Town, and what is the daily meal per diem for NL and European travel?",
+    "expected_answer": "The maximum hotel rate is €150 per night for Amsterdam and Cape Town (€120 per night for other locations). The daily meal per diem for NL and European travel is €45 per day (or itemized receipts). For ZA it is R400 per day.",
+    "expected_sources": ["Travel_Policy.md", "Expense_Reimbursement_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "multi_hop"
+  },
+  {
+    "id": "q12_multi_hop",
+    "question": "The Benefits Overview lists parental leave as a core benefit for all employees. According to the Maternity Leave Policy, how many weeks of paid maternity leave are Netherlands employees entitled to, at what salary percentage, and how far in advance must they notify HR?",
+    "expected_answer": "NL employees are entitled to 16 weeks of paid maternity leave at 100% of salary, funded through the WAZO benefit applied by Call360 on their behalf. Annual leave continues to accrue during this period. Employees must notify HR at least 3 months before the intended start of maternity leave.",
+    "expected_sources": ["Benefits_Overview.md", "Maternity_Leave_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "multi_hop"
+  },
+  {
+    "id": "q13_negative_constraint",
+    "question": "According to the AI Tools Usage Policy, which types of data or content must employees NEVER input into external or unapproved AI tools?",
+    "expected_answer": "Employees must never input the following into external or unapproved AI tools: customer personal data (names, contact details, financial information), employee personal data, confidential business strategies or financial forecasts or M&A information, proprietary source code or unreleased product details, passwords or security credentials, and legal advice or privileged attorney-client communications.",
+    "expected_sources": ["AI_Tools_Usage_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "negative_constraint"
+  },
+  {
+    "id": "q14_negative_constraint",
+    "question": "According to the Employee Referral Program, which types of referrals do NOT qualify for the €1,000 bonus?",
+    "expected_answer": "The following referrals do not qualify: referrals made by hiring managers for their own team, referrals submitted by in-house recruiters, referrals of interns, consultants, or freelancers, and cases where the same candidate is referred by multiple employees (only the first referral submitted qualifies).",
+    "expected_sources": ["Employee_Referral_Program.md"],
+    "difficulty": "hard",
+    "edge_case_type": "negative_constraint"
+  },
+  {
+    "id": "q15_negative_constraint",
+    "question": "According to the Expense Reimbursement Policy, which expenses are explicitly listed as NOT reimbursable at Call360?",
+    "expected_answer": "Non-reimbursable expenses include: alcohol (unless it is a group team dinner pre-approved by a manager at VP level or above), personal entertainment, clothing or gifts, traffic fines or parking tickets, personal trips or activities during business travel, and any expenses that exceed policy limits without prior approval.",
+    "expected_sources": ["Expense_Reimbursement_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "negative_constraint"
+  },
+  {
+    "id": "q16_negative_constraint",
+    "question": "According to the Remote Work Policy, which types of roles are NOT eligible for remote work, and what is the maximum number of days per week that hybrid employees may work from home?",
+    "expected_answer": "On-site customer support and office operations roles are not eligible for remote work. Hybrid employees (Amsterdam and Cape Town office staff) may work from home up to 2 days per week, subject to team arrangements and manager approval.",
+    "expected_sources": ["Remote_Work_Policy.md"],
+    "difficulty": "hard",
+    "edge_case_type": "negative_constraint"
+  },
+  {
+    "id": "q17_temporal",
+    "question": "According to the Vacation and Leave Policy, by what specific date do the 20 statutory vacation days for NL employees expire if not taken?",
+    "expected_answer": "The 20 statutory days expire by 30 June of the following calendar year. The remaining 5 non-statutory days can be carried over for up to 5 years.",
+    "expected_sources": ["Vacation_and_Leave_Policy.md"],
+    "difficulty": "medium",
+    "edge_case_type": "temporal"
+  },
+  {
+    "id": "q18_temporal",
+    "question": "According to the Learning and Development Budget Policy, when does a new employee become eligible to access their L&D budget after their start date?",
+    "expected_answer": "The L&D budget is accessible after 2 months of employment. If joining mid-year, the budget is calculated pro-rata from the start date.",
+    "expected_sources": ["Learning_and_Development_Budget.md"],
+    "difficulty": "medium",
+    "edge_case_type": "temporal"
+  },
+  {
+    "id": "q19_temporal",
+    "question": "According to the Employee Handbook Overview, what version is the current handbook and when did it become effective?",
+    "expected_answer": "The current Employee Handbook Overview is Version 3.1 and became effective in January 2026.",
+    "expected_sources": ["Employee_Handbook_Overview.md"],
+    "difficulty": "medium",
+    "edge_case_type": "temporal"
+  },
+  {
+    "id": "q20_math_aggregation",
+    "question": "According to the Commute and Transport Allowance Policy, if an NL employee lives 15 km from the office and commutes by bicycle for 20 working days in a month, what is their total mileage reimbursement for that month?",
+    "expected_answer": "The total reimbursement is €138.00. Calculation: 15 km × 2 (round trip) × €0.23/km × 20 days = €138.00.",
+    "expected_sources": ["Commute_and_Transport_Allowance.md"],
+    "difficulty": "medium",
+    "edge_case_type": "math_aggregation"
+  },
+  {
+    "id": "q21_math_aggregation",
+    "question": "According to the Learning and Development Budget Policy, how many paid study days per year does an employee working 24 or more hours per week receive, and how does this differ for part-time employees working 0–23 hours per week?",
+    "expected_answer": "Employees working 24 or more hours per week receive 2 paid study days per year and the full L&D budget (up to €1,500). Employees working 0–23 hours per week receive only 1 paid study day and 50% of the standard budget (maximum €750 per year).",
+    "expected_sources": ["Learning_and_Development_Budget.md"],
+    "difficulty": "medium",
+    "edge_case_type": "math_aggregation"
+  },
+  {
+    "id": "q22_math_aggregation",
+    "question": "According to the Performance Review Process, how many formal performance reviews take place per year, and how many rating levels are used in the performance assessment scale?",
+    "expected_answer": "Two formal performance reviews take place per year: a Mid-Year Review in July and a Year-End Review in December. Performance is assessed on a 4-point scale: Exceeds Expectations, Meets Expectations, Partially Meets Expectations, and Does Not Meet Expectations.",
+    "expected_sources": ["Performance_Review_Process.md"],
+    "difficulty": "medium",
+    "edge_case_type": "math_aggregation"
+  },
+  {
+    "id": "q23_needle_haystack",
+    "question": "According to the Remote Work Policy, what is the minimum internet speed required for fully remote employees?",
+    "expected_answer": "Fully remote employees must maintain reliable, high-speed internet with a minimum speed of 25 Mbps.",
+    "expected_sources": ["Remote_Work_Policy.md"],
+    "difficulty": "medium",
+    "edge_case_type": "needle_in_haystack"
+  },
+  {
+    "id": "q24_needle_haystack",
+    "question": "According to the Learning and Development Budget Policy, if an employee spends two years' L&D budget in a single year and then leaves within 12 months, what financial obligation applies?",
+    "expected_answer": "A clawback clause in the signed Education Agreement applies: Call360 reserves the right to recoup up to 50% of the amount spent if the employee leaves within 12 months of the learning activity.",
+    "expected_sources": ["Learning_and_Development_Budget.md"],
+    "difficulty": "medium",
+    "edge_case_type": "needle_in_haystack"
+  },
+  {
+    "id": "q25_needle_haystack",
+    "question": "According to the Disciplinary Process, how long is a first written warning valid, and how long is a final written warning valid?",
+    "expected_answer": "A first written warning is valid for 6 months. A final written warning is valid for 12 months. After the validity period, warnings are removed from active consideration (though retained in records).",
+    "expected_sources": ["Disciplinary_Process.md"],
+    "difficulty": "medium",
+    "edge_case_type": "needle_in_haystack"
+  },
+  {
+    "id": "q26_false_premise",
+    "question": "What is Call360's policy on a mandatory four-day workweek for all employees?",
+    "expected_answer": "I don't have enough information in the current documents to answer that. None of the provided policy documents contain a four-day workweek policy at Call360.",
+    "expected_sources": [],
+    "difficulty": "medium",
+    "edge_case_type": "false_premise"
+  },
+  {
+    "id": "q27_false_premise",
+    "question": "According to Call360's policies, what is the company's annual gym membership reimbursement for employees?",
+    "expected_answer": "I don't have enough information in the current documents to answer that. None of the provided policy documents mention a gym membership reimbursement at Call360.",
+    "expected_sources": [],
+    "difficulty": "medium",
+    "edge_case_type": "false_premise"
+  },
+  {
+    "id": "q28_false_premise",
+    "question": "What is Call360's stock option or equity vesting schedule for new employees?",
+    "expected_answer": "I don't have enough information in the current documents to answer that. None of the provided policy documents mention any stock option or equity vesting schedule at Call360.",
+    "expected_sources": [],
+    "difficulty": "medium",
+    "edge_case_type": "false_premise"
+  },
+  {
+    "id": "q29_adversarial_conflict",
+    "question": "What is the official Talk360 mascot?",
+    "expected_answer": "The official mascot is a blue penguin named 'Pingu'.",
+    "expected_sources": ["Not_lies.md"],
+    "difficulty": "hard",
+    "edge_case_type": "context_conflict"
+  },
+  {
+    "id": "q30_adversarial_warning_bypass",
+    "question": "What is the daily food or lunch allowance provided by the company?",
+    "expected_answer": "The company provides a daily lunch allowance of €15.",
+    "expected_sources": ["Not_lies.md"],
+    "difficulty": "hard",
+    "edge_case_type": "warning_bypass"
+  }
+]

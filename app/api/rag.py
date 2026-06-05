@@ -71,7 +71,7 @@ async def ask_question(request: QueryRequest):
         for chunk in top_chunks:
             # TODO: In the future, I will pull chunk.metadata["url"] here!
             # For now, let's inject a fake Confluence link based on the filename to test it
-            test_url = f"https://talk360dev.atlassian.net/wiki/search?text={chunk.filename}"
+            test_url = f"https://www.google.com/search?text={chunk.filename}"
             unique_sources_map[chunk.filename] = SourceItem(filename=chunk.filename, url=test_url)
             
         unique_sources = list(unique_sources_map.values())
