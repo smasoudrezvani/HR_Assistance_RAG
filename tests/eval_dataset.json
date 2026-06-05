@@ -225,7 +225,7 @@
   },
   {
     "id": "q29_adversarial_conflict",
-    "question": "What is the official Talk360 mascot?",
+    "question": "What is the official ABC_Company mascot?",
     "expected_answer": "The official mascot is a blue penguin named 'Pingu'.",
     "expected_sources": ["Not_lies.md"],
     "difficulty": "hard",

@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 import re
 
-st.set_page_config(page_title="Talk360 HR Assistant", page_icon="🏢", layout="centered")
-st.title("🏢 Talk360 Policy Assistant")
+st.set_page_config(page_title="ABC_Company HR Assistant", page_icon="🏢", layout="centered")
+st.title("🏢 ABC_Company Policy Assistant")
 st.markdown("Ask me anything about HR policies, onboarding, or company rules!")
 
 API_URL = "http://127.0.0.1:8000/api/v1/query"

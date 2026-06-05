@@ -23,7 +23,7 @@ async def ask_question(request: QueryRequest):
         # if not is_safe_query(request.question):
         #     print(f"🚨 BLOCKED MALICIOUS/OFF-TOPIC QUERY: '{request.question}'")
         #     return QueryResponse(
-        #         answer="I can only answer questions related to Talk360's HR policies, onboarding, and company rules. Please rephrase your question.",
+        #         answer="I can only answer questions related to ABC_Company's HR policies, onboarding, and company rules. Please rephrase your question.",
         #         sources=[]
         #     )
         # # -----------------------------------

@@ -10,7 +10,7 @@
 
 ### 1. The Keyword Dilution Failure
 * **Example Case:** *"What is the name of the company?"* (Scored `0.0` Correctness)
-* **Root Cause:** The word "Talk360" appears continuously across all documents as structural boilerplate. Because it is everywhere, the dense embedding model dilutes its semantic value. The query searches for the *concept* of naming an entity, rather than matching on the specific keyword.
+* **Root Cause:** The word "ABC_Company" appears continuously across all documents as structural boilerplate. Because it is everywhere, the dense embedding model dilutes its semantic value. The query searches for the *concept* of naming an entity, rather than matching on the specific keyword.
 * **Stage 3 Remediation Strategy:** **BM25 Sparse Retrieval**. Keyword frequency matching will instantly catch instances where explicit terms appear, matching the exact name regardless of surrounding semantic abstractions.
 
 ### 2. The Partial Summarization Failure
