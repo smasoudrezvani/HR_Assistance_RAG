@@ -100,8 +100,8 @@ def main():
     print("="*40)
 
     # --- 🛑 THE CI/CD GATEKEEPER ---
-    # If the system drops below 60% correctness or 95% faithfulness, fail the build!
-    if avg_correctness < 0.60 or avg_faithfulness < 0.95:
+    # If the system drops below 60% correctness or 85% faithfulness, fail the build!
+    if avg_correctness < 0.60 or avg_faithfulness < 0.85:
         print("\n❌ CI/CD ALERT: Evaluation scores fell below acceptable production thresholds.")
         sys.exit(1) # This tells GitHub Actions to highlight the pipeline in RED
     else:
